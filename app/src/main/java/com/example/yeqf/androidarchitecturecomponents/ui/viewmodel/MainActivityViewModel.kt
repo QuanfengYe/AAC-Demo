@@ -1,21 +1,38 @@
 package com.example.yeqf.androidarchitecturecomponents.ui.viewmodel
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import android.util.Log
+import com.example.yeqf.androidarchitecturecomponents.base.BaseViewModel
 import com.example.yeqf.androidarchitecturecomponents.persistence.entity.User
 import com.example.yeqf.androidarchitecturecomponents.repository.UserRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Action
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by yeqf on 2018/2/10.
  */
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel : BaseViewModel() {
 
-    fun getUser(id: String): LiveData<User> =
-        UserRepository.getUserById(id)
+    override fun onStop() {
+        super.onStop()
+        mDisposable.clear()
+    }
 
-    fun addUser(user: User) {
-        Thread(Runnable {
-            UserRepository.addUser(user)
-        }).start()
+    fun getUser(id: String, onSuccess: Consumer<User>) {
+        mDisposable.add(UserRepository.getUserById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe( { onSuccess.accept(it) },
+                        { error -> Log.e("", "Unable to get user info!", error) }))
+    }
+
+    fun addUser(user: User, onComplete: Action?) {
+        mDisposable.add(UserRepository.addUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ onComplete?.run() },
+                        { error -> Log.e("", "Unable to update user info!", error) }))
+
     }
 }

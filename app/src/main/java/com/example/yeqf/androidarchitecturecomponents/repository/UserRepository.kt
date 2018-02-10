@@ -1,9 +1,10 @@
 package com.example.yeqf.androidarchitecturecomponents.repository
 
-import android.arch.lifecycle.LiveData
 import com.example.yeqf.androidarchitecturecomponents.persistence.dao.UserDao
 import com.example.yeqf.androidarchitecturecomponents.persistence.database.UserDatabase
 import com.example.yeqf.androidarchitecturecomponents.persistence.entity.User
+import io.reactivex.Completable
+import io.reactivex.Flowable
 
 /**
  * Created by yeqf on 2018/2/10.
@@ -13,10 +14,11 @@ object UserRepository {
         return UserDatabase.getInstance().getUserDao()
     }
 
-    fun getUserById(id: String): LiveData<User> =
+    fun getUserById(id: String): Flowable<User> =
             getUserDao().getUserById(id)
 
-    fun addUser(user: User) {
-        getUserDao().insert(user)
-    }
+    fun addUser(user: User): Completable =
+        Completable.fromAction( {
+            getUserDao().insert(user)
+        })
 }

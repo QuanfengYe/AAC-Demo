@@ -34,13 +34,6 @@
             android:layout_marginTop="8dp"
             android:hint=""
             android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="更新"
-            android:textSize="24sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
