@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import com.example.yeqf.androidarchitecturecomponents.R
 import com.example.yeqf.androidarchitecturecomponents.persistence.entity.User
 import com.example.yeqf.androidarchitecturecomponents.ui.viewmodel.MainActivityViewModel
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -26,11 +25,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getUser("1", object : Consumer<User> {
-            override fun accept(t: User?) {
-                textView.text = t?.name
-            }
-        })
+        viewModel.getUser("1"){
+            textView.text = it.name
+        }
     }
 
     private fun initView() {
@@ -48,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val user = User("1", s.toString())
-            viewModel.addUser(user, null)
+            viewModel.addUser(user) {}
         }
     }
 
