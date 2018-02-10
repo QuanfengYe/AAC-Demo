@@ -1,0 +1,20 @@
+package com.example.yeqf.androidarchitecturecomponents.persistence.dao
+
+import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
+import com.example.yeqf.androidarchitecturecomponents.persistence.entity.User
+
+/**
+ * Created by yeqf on 2018/2/10.
+ */
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE id = :id")
+    fun getUserById(id: String): LiveData<User>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(user: User)
+}
