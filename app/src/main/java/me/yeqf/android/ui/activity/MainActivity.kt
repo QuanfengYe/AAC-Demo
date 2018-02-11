@@ -7,9 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import me.yeqf.android.R
-import me.yeqf.android.persistence.entity.User
 import me.yeqf.android.ui.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import me.yeqf.common.utils.TimeUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         edit.addTextChangedListener(mWatcher)
-        viewModel.getUser("1"){
-            textView.text = it.name
+        viewModel.getDaily(2018, 2, 8){
+            textView.text = it.toString()
         }
     }
 
@@ -41,15 +41,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val user = User("1", s.toString())
-            viewModel.addUser(user) {}
-            viewModel.getDaily(2018, 2, 8) {
-                Toast.makeText(this@MainActivity, it.toString(), Toast.LENGTH_SHORT).show()
+            val timeStr = s.toString()
+            val date = TimeUtils.getDate(timeStr, TimeUtils.FORMAT_YYYYMMDD)
+            viewModel.getDaily(date[0], date[1], date[2]) {
+                textView.text = it.toString()
             }
         }
-    }
-
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
     }
 }

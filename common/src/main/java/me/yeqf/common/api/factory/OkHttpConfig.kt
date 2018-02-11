@@ -1,4 +1,4 @@
-package me.yeqf.common.api.config
+package me.yeqf.common.api.factory
 import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

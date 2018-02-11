@@ -1,9 +1,8 @@
 package me.yeqf.android.api.retrofit
 
+import io.reactivex.Flowable
 import io.reactivex.Single
-import me.yeqf.android.bean.Category
-import me.yeqf.android.bean.Ganhuo
-import me.yeqf.android.bean.GankIo
+import me.yeqf.android.persistence.entity.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -15,7 +14,7 @@ interface GankIoService {
      * http://gank.io/api/day/history 方式 GET
      */
     @GET("day/history")
-    fun getPostedDateList(): Single<GankIo<List<String>>>
+    fun getPostedDateList(): Single<DateData>
 
     /**
      * 每日数据： http://gank.io/api/day/年/月/日
@@ -23,7 +22,7 @@ interface GankIoService {
     @GET("day/{year}/{month}/{day}")
     fun getDailyData(@Path("year") year: Int,
                      @Path("month") month: Int,
-                     @Path("day") day: Int) : Single<GankIo<Category>>
+                     @Path("day") day: Int) : Flowable<DailyData>
 
     /**
      * 分类数据: http://gank.io/api/data/数据类型/请求个数/第几页
@@ -31,14 +30,14 @@ interface GankIoService {
     @GET("data/{category}/{count}/{page}")
     fun getCategoryData(@Path("category") category: String,
                         @Path("count") count: Int,
-                        @Path("page") page: Int): Single<GankIo<List<Ganhuo>>>
+                        @Path("page") page: Int): Single<GanhuoData>
 
     /**
      * 随机数据：http://gank.io/api/random/data/分类/个数
      */
     @GET("random/data/{category}/{count}")
     fun getRandomData(@Path("category") category: String,
-                        @Path("count") count: Int): Single<GankIo<List<Ganhuo>>>
+                        @Path("count") count: Int): Single<GanhuoData>
 
     /**
      * 搜索 API
@@ -50,5 +49,5 @@ interface GankIoService {
     @GET("search/query/listview/category/{category}/count/{count}/page/{page}")
     fun getSearchResults(@Path("category") category: String,
                          @Path("count") count: Int,
-                         @Path("page") page: Int): Single<GankIo<List<Ganhuo>>>
+                         @Path("page") page: Int): Single<GanhuoData>
 }

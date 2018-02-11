@@ -4,17 +4,20 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import me.yeqf.android.persistence.entity.User
 import io.reactivex.Flowable
+import me.yeqf.android.persistence.entity.DailyData
 
 /**
  * Created by yeqf on 2018/2/10.
  */
 @Dao
-interface UserDao {
-    @Query("SELECT * FROM users WHERE id = :id")
-    fun getUserById(id: String): Flowable<User>
+interface GankIoDao {
+    /**
+     *  time:yyyy-MM-dd
+     */
+    @Query("SELECT * FROM DailyCache WHERE time = :time")
+    fun getDailyData(time: String): Flowable<DailyData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: User)
+    fun insert(data: DailyData)
 }
