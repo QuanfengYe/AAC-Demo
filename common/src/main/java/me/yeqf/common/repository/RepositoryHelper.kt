@@ -1,5 +1,6 @@
 package me.yeqf.common.repository
 
+import android.util.Log
 import io.reactivex.Flowable
 
 /**
@@ -11,12 +12,14 @@ abstract class RepositoryHelper<ResultType, ResponseType> {
 
     fun getResult(): Flowable<ResultType> =
             Flowable.concat(
-                    loadFromDb(),
-                    createCall().concatMap {
+                    loadFromDb().onBackpressureBuffer(),
+                    createCall()
+                            .concatMap {
+                                Log.d("createCall", "concatMap")
                                 saveCallResult(it)
                                 return@concatMap loadFromDb()
                             }
-            )
+            ).onBackpressureBuffer()
 
 
     protected abstract fun saveCallResult(resp: ResponseType)

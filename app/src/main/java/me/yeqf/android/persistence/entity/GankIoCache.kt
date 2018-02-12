@@ -27,6 +27,7 @@ data class GankIoCache(@PrimaryKey(autoGenerate = true) var id: Int,
                        @SerializedName("updated_at")
                        var updatedAt: Long = 0,
                        var time: String) {
+    constructor(): this(0, "", 0, "", 0, "", "", "", false, "", "", "", 0, "")
     constructor(o: GanHuo) :
             this(0,
                     o._id,

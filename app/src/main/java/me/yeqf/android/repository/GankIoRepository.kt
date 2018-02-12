@@ -1,14 +1,13 @@
 package me.yeqf.android.repository
 
 import android.util.Log
-import me.yeqf.android.persistence.dao.GankIoDao
-import me.yeqf.android.persistence.database.CacheDatabase
 import io.reactivex.Flowable
-import me.yeqf.android.R.id.end
 import me.yeqf.android.api.retrofit.GankIoFactory
 import me.yeqf.android.bean.DailyData
 import me.yeqf.android.bean.GanHuo
 import me.yeqf.android.bean.ItemData
+import me.yeqf.android.persistence.dao.GankIoDao
+import me.yeqf.android.persistence.database.CacheDatabase
 import me.yeqf.android.persistence.entity.GankIoCache
 import me.yeqf.common.repository.RepositoryHelper
 

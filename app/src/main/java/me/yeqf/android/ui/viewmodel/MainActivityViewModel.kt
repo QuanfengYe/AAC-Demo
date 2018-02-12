@@ -25,7 +25,7 @@ class MainActivityViewModel : BaseViewModel() {
     fun getCategory(category: String, count: Int, page: Int, body:(GankIoCache) -> Unit) {
         mDisposable.add(GankIoRepository.getCatetory(category, count, page)
                 .compose(RxSchedulers.runOnIoOfFlowable())
-                .subscribe { body(it) })
+                .subscribe({ body(it) }, { error -> Log.e(TAG, "Unable to get gank.io category  info!", error) }))
     }
 
     companion object {

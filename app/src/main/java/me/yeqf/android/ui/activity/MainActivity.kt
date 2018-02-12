@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import me.yeqf.android.R
 import me.yeqf.android.ui.viewmodel.MainActivityViewModel
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             val date = TimeUtils.getDate(timeStr, TimeUtils.FORMAT_YYYYMMDD)
             viewModel.getDaily(date[0], date[1], date[2]) {
                 textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
+                Log.d("MainActivity", System.currentTimeMillis().toString() + "\n" + it.toString())
             }
 //            viewModel.getCategory(s.toString(), 10, 1) {
 //                textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
