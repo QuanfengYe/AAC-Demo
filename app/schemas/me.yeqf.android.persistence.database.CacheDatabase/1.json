@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0e68beddf1a5460b418366b9c1a33d0b",
+    "identityHash": "f558c1cda5894ee6685f113237378a6d",
     "entities": [
       {
-        "tableName": "DailyCache",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `count` INTEGER NOT NULL, `error` INTEGER NOT NULL, `time` TEXT NOT NULL)",
+        "tableName": "GankIoCache",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `_id` TEXT, `createdAt` INTEGER NOT NULL, `desc` TEXT, `publishedAt` INTEGER NOT NULL, `source` TEXT, `type` TEXT, `url` TEXT, `used` INTEGER, `who` TEXT, `imagesUrl` TEXT, `content` TEXT, `updatedAt` INTEGER NOT NULL, `time` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,14 +15,74 @@
             "notNull": true
           },
           {
-            "fieldPath": "count",
-            "columnName": "count",
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "error",
-            "columnName": "error",
+            "fieldPath": "desc",
+            "columnName": "desc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "publishedAt",
+            "columnName": "publishedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "used",
+            "columnName": "used",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "who",
+            "columnName": "who",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imagesUrl",
+            "columnName": "imagesUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -45,7 +105,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0e68beddf1a5460b418366b9c1a33d0b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f558c1cda5894ee6685f113237378a6d\")"
     ]
   }
 }

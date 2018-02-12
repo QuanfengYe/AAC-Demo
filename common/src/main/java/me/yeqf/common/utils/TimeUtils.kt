@@ -1,5 +1,6 @@
 package me.yeqf.common.utils
 
+import android.util.Log
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -9,15 +10,41 @@ import java.util.*
  */
 object TimeUtils {
     val FORMAT_YYYYMMDD = SimpleDateFormat("yyyyMMdd", Locale.CHINA)
+    val FORMAT_YYYY_MM_DD = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
+    val FORMAT_YYYYMMDD_T_HHMMSS_SSSZ = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
 
-    fun getTime(time: String, format: SimpleDateFormat): Long {
+    /**
+     * 将字符串时间转long值（ms）
+     * @param time 时间格式字符串
+     * @param format time的时间格式
+     * @return Long
+     */
+    fun getTime(time: String?, format: SimpleDateFormat): Long {
+        if(time == null)
+            return 0
         try {
             val date = format.parse(time)
+            Log.d("", "date:" + date.toString() + ", time:" + date.time)
             return date.time
         } catch (e: ParseException) {
             e.printStackTrace()
         }
         return 0
+    }
+
+    /**
+     * 将long值（ms）转字符串时间
+     * @param time Long
+     * @param format time的时间格式
+     * @return String
+     */
+    fun getTime(time: Long, format: SimpleDateFormat): String {
+        try {
+            return format.format(Date(time))
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return ""
     }
 
     fun getDate(time: String, format: SimpleDateFormat): Array<Int> {

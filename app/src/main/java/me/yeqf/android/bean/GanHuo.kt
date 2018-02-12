@@ -1,9 +1,11 @@
-package me.yeqf.android.persistence.entity
+package me.yeqf.android.bean
+
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by Administrator on 2018\2\11 0011.
  */
-data class Ganhuo(var _id: String? = "",
+data class GanHuo(var _id: String? = "",
                   var createdAt: String? = "",
                   var desc: String? = "",
                   var publishedAt: String? = "",
@@ -12,6 +14,6 @@ data class Ganhuo(var _id: String? = "",
                   var url: String? = "",
                   var used: Boolean? = false,
                   var who: String? = "",
-                  var images: List<String>? = null){
-    constructor() : this("", "", "", "", "", "", "", false, "", null)
-}
+                  var images: List<String>? = null,
+                  var updated_at: String = "",
+                  var content: String)

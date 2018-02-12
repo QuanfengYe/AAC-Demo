@@ -5,12 +5,13 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import me.yeqf.android.App
 import me.yeqf.android.persistence.dao.GankIoDao
-import me.yeqf.android.persistence.entity.DailyData
+import me.yeqf.android.bean.DailyData
+import me.yeqf.android.persistence.entity.GankIoCache
 
 /**
  * Created by yeqf on 2018/2/10.
  */
-@Database(entities = arrayOf(DailyData::class), version = 1)
+@Database(entities = arrayOf(GankIoCache::class), version = 1)
 abstract class CacheDatabase : RoomDatabase() {
 
     abstract fun getGankIoDao(): GankIoDao

@@ -9,6 +9,7 @@ import android.widget.Toast
 import me.yeqf.android.R
 import me.yeqf.android.ui.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import me.yeqf.android.R.id.textView
 import me.yeqf.common.utils.TimeUtils
 
 class MainActivity : AppCompatActivity() {
@@ -26,9 +27,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         edit.addTextChangedListener(mWatcher)
-        viewModel.getDaily(2018, 2, 8){
-            textView.text = it.toString()
-        }
     }
 
     private val mWatcher = object : TextWatcher {
@@ -44,8 +42,11 @@ class MainActivity : AppCompatActivity() {
             val timeStr = s.toString()
             val date = TimeUtils.getDate(timeStr, TimeUtils.FORMAT_YYYYMMDD)
             viewModel.getDaily(date[0], date[1], date[2]) {
-                textView.text = it.toString()
+                textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
             }
+//            viewModel.getCategory(s.toString(), 10, 1) {
+//                textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
+//            }
         }
     }
 }

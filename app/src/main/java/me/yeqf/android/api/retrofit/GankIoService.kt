@@ -2,7 +2,9 @@ package me.yeqf.android.api.retrofit
 
 import io.reactivex.Flowable
 import io.reactivex.Single
-import me.yeqf.android.persistence.entity.*
+import me.yeqf.android.bean.DailyData
+import me.yeqf.android.bean.DateData
+import me.yeqf.android.bean.ItemData
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -30,14 +32,14 @@ interface GankIoService {
     @GET("data/{category}/{count}/{page}")
     fun getCategoryData(@Path("category") category: String,
                         @Path("count") count: Int,
-                        @Path("page") page: Int): Single<GanhuoData>
+                        @Path("page") page: Int): Flowable<ItemData>
 
     /**
      * 随机数据：http://gank.io/api/random/data/分类/个数
      */
     @GET("random/data/{category}/{count}")
     fun getRandomData(@Path("category") category: String,
-                        @Path("count") count: Int): Single<GanhuoData>
+                        @Path("count") count: Int): Flowable<ItemData>
 
     /**
      * 搜索 API
@@ -49,5 +51,5 @@ interface GankIoService {
     @GET("search/query/listview/category/{category}/count/{count}/page/{page}")
     fun getSearchResults(@Path("category") category: String,
                          @Path("count") count: Int,
-                         @Path("page") page: Int): Single<GanhuoData>
+                         @Path("page") page: Int): Flowable<ItemData>
 }
