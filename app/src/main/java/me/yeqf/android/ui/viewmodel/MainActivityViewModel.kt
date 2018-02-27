@@ -16,16 +16,16 @@ class MainActivityViewModel : BaseViewModel() {
         mDisposable.clear()
     }
 
-    fun getDaily(year: Int, month: Int, day: Int, body:(GankIoCache) -> Unit) {
+    fun getDaily(year: Int, month: Int, day: Int, body:(List<GankIoCache>) -> Unit) {
         mDisposable.add(GankIoRepository.getDaily(year, month, day)
-                .compose(RxSchedulers.runOnIoOfFlowable())
-                .subscribe( { body(it) }, { error -> Log.e(TAG, "Unable to get gank.io daily  info!", error) }))
+                .compose(RxSchedulers.Flowable.runOnIo())
+                .subscribe( { body(it) }, { Log.e(TAG, "Unable to get gank.io daily  info!", it) }))
     }
 
     fun getCategory(category: String, count: Int, page: Int, body:(GankIoCache) -> Unit) {
         mDisposable.add(GankIoRepository.getCatetory(category, count, page)
-                .compose(RxSchedulers.runOnIoOfFlowable())
-                .subscribe({ body(it) }, { error -> Log.e(TAG, "Unable to get gank.io category  info!", error) }))
+                .compose(RxSchedulers.Flowable.runOnIo())
+                .subscribe({ body(it) }, { Log.e(TAG, "Unable to get gank.io category  info!", it) }))
     }
 
     companion object {

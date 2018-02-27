@@ -1,6 +1,5 @@
 package me.yeqf.common.utils
 
-import android.util.Log
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +23,6 @@ object TimeUtils {
             return 0
         try {
             val date = format.parse(time)
-            Log.d("", "date:" + date.toString() + ", time:" + date.time)
             return date.time
         } catch (e: ParseException) {
             e.printStackTrace()

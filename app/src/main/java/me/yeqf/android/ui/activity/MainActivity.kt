@@ -11,6 +11,7 @@ import me.yeqf.android.R
 import me.yeqf.android.ui.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import me.yeqf.android.R.id.textView
+import me.yeqf.android.persistence.entity.GankIoCache
 import me.yeqf.common.utils.TimeUtils
 
 class MainActivity : AppCompatActivity() {
@@ -42,10 +43,13 @@ class MainActivity : AppCompatActivity() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val timeStr = s.toString()
             val date = TimeUtils.getDate(timeStr, TimeUtils.FORMAT_YYYYMMDD)
-            viewModel.getDaily(date[0], date[1], date[2]) {
-                textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
-                Log.d("MainActivity", System.currentTimeMillis().toString() + "\n" + it.toString())
-            }
+            if(s?.length == 8)
+                viewModel.getDaily(date[0], date[1], date[2]) {
+                    textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
+                    for(cache: GankIoCache in it) {
+                        Log.d("MainActivity", System.currentTimeMillis().toString() + "---" + cache.toString())
+                    }
+                }
 //            viewModel.getCategory(s.toString(), 10, 1) {
 //                textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
 //            }

@@ -2,25 +2,22 @@ package me.yeqf.common.repository
 
 import android.util.Log
 import io.reactivex.Flowable
+import me.yeqf.common.utils.rxjava.RxSchedulers
 
 /**
  *
  */
 abstract class RepositoryHelper<ResultType, ResponseType> {
-    private var response: ResponseType? = null
-    private var result: ResultType? = null
 
     fun getResult(): Flowable<ResultType> =
-            Flowable.concat(
-                    loadFromDb().onBackpressureBuffer(),
-                    createCall()
-                            .concatMap {
-                                Log.d("createCall", "concatMap")
+            loadFromDb().doOnNext {
+                Log.d("loadFromDb", "doOnNext" + it.toString())
+                if (shouldFetch(it))
+                    createCall().compose(RxSchedulers.Flowable.runOnlyIo())
+                            .subscribe {
                                 saveCallResult(it)
-                                return@concatMap loadFromDb()
                             }
-            ).onBackpressureBuffer()
-
+            }
 
     protected abstract fun saveCallResult(resp: ResponseType)
 

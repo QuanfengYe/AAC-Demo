@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by Administrator on 2018\2\11 0011.
  */
-data class GanHuo(var _id: String? = "",
+data class GanHuo(var _id: String = "",
                   var createdAt: String? = "",
                   var desc: String? = "",
                   var publishedAt: String? = "",

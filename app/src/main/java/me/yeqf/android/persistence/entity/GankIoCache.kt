@@ -5,17 +5,16 @@ import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import me.yeqf.android.bean.GanHuo
 import me.yeqf.common.utils.TimeUtils
+import java.util.*
 
 /**
  * Created by Administrator on 2018\2\12 0012.
  */
 @Entity(tableName = "GankIoCache")
-data class GankIoCache(@PrimaryKey(autoGenerate = true) var id: Int,
-                       var _id: String? = "",
-                       @SerializedName("created_at")
+data class GankIoCache(@PrimaryKey
+                       var _id: String = "",
                        var createdAt: Long = 0,
                        var desc: String? = "",
-                       @SerializedName("published_at")
                        var publishedAt: Long = 0,
                        var source: String? = "",
                        var type: String? = "",
@@ -24,13 +23,13 @@ data class GankIoCache(@PrimaryKey(autoGenerate = true) var id: Int,
                        var who: String? = "",
                        var imagesUrl: String? = null,
                        var content: String? = null,
-                       @SerializedName("updated_at")
                        var updatedAt: Long = 0,
-                       var time: String) {
-    constructor(): this(0, "", 0, "", 0, "", "", "", false, "", "", "", 0, "")
-    constructor(o: GanHuo) :
-            this(0,
-                    o._id,
+                       var time: String,
+                       var apiFrom: Int,
+                       var insertTime: Long) {
+    constructor(): this("", 0, "", 0, "", "", "", false, "", "", "", 0, "", 0, 0)
+    constructor(o: GanHuo, apiFrom: Int) :
+            this(o._id,
                     TimeUtils.getTime(o.createdAt, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
                     o.desc,
                     TimeUtils.getTime(o.publishedAt, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
@@ -42,7 +41,9 @@ data class GankIoCache(@PrimaryKey(autoGenerate = true) var id: Int,
                     null,
                     o.content,
                     TimeUtils.getTime(o.updated_at, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
-                    "1970-01-01") {
+                    "1970-01-01",
+                    apiFrom,
+                    0) {
         if(o.images != null) {
             val sb = StringBuffer()
             for (s: String in o.images!!) {
@@ -50,7 +51,9 @@ data class GankIoCache(@PrimaryKey(autoGenerate = true) var id: Int,
                 sb.append(",")
             }
             this.imagesUrl = sb.substring(0, sb.length - 1)
-            this.time = TimeUtils.getTime(publishedAt, TimeUtils.FORMAT_YYYY_MM_DD)
         }
+        if(publishedAt > 0)
+            this.time = TimeUtils.getTime(publishedAt, TimeUtils.FORMAT_YYYY_MM_DD)
+        insertTime = System.currentTimeMillis()
     }
 }

@@ -8,43 +8,54 @@ import io.reactivex.schedulers.Schedulers
  * Created by Administrator on 2018\2\11 0011.
  */
 object RxSchedulers {
-    fun <T> runOnlyIoOfObservable(): ObservableTransformer<T, T> {
-        return ObservableTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+
+    object Observable {
+        fun <T> runOnlyIo(): ObservableTransformer<T, T> {
+            return ObservableTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+        }
+
+        fun <T> runOnIo(): ObservableTransformer<T, T> {
+            return ObservableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        }
     }
 
-    fun <T> runOnIoOfObservable(): ObservableTransformer<T, T> {
-        return ObservableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+    object Flowable {
+        fun <T> runOnlyIo(): FlowableTransformer<T, T> {
+            return FlowableTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+        }
+
+        fun <T> runOnIo(): FlowableTransformer<T, T> {
+            return FlowableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        }
     }
 
-    fun <T> runOnlyIoOfFlowable(): FlowableTransformer<T, T> {
-        return FlowableTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+    object Single {
+        fun <T> runOnlyIo(): SingleTransformer<T, T> {
+            return SingleTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+        }
+
+        fun <T> runOnIo(): SingleTransformer<T, T> {
+            return SingleTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        }
     }
 
-    fun <T> runOnIoOfFlowable(): FlowableTransformer<T, T> {
-        return FlowableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+    object Completable {
+        fun runOnlyIo(): CompletableTransformer {
+            return CompletableTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+        }
+
+        fun runOnIo(): CompletableTransformer {
+            return CompletableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        }
     }
 
-    fun <T> runOnlyIoOfSingle(): SingleTransformer<T, T> {
-        return SingleTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
-    }
+    object Maybe {
+        fun <T> runOnlyIo(): MaybeTransformer<T, T> {
+            return MaybeTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
+        }
 
-    fun <T> runOnIoOfSingle(): SingleTransformer<T, T> {
-        return SingleTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
-    }
-
-    fun runOnlyIoOfCompletable(): CompletableTransformer {
-        return CompletableTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
-    }
-
-    fun runOnIoOfCompletable(): CompletableTransformer {
-        return CompletableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
-    }
-
-    fun <T> runOnlyIoOfMaybe(): MaybeTransformer<T, T> {
-        return MaybeTransformer { it.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()) }
-    }
-
-    fun <T> runOnIoOfMaybe(): MaybeTransformer<T, T> {
-        return MaybeTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        fun <T> runOnIo(): MaybeTransformer<T, T> {
+            return MaybeTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        }
     }
 }

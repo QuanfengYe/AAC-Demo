@@ -17,7 +17,7 @@ interface GankIoDao {
      *  time:yyyy-MM-dd
      */
     @Query("SELECT * FROM GankIoCache WHERE time = :time")
-    fun getDailyData(time: String): Flowable<GankIoCache>
+    fun getDailyData(time: String): Flowable<List<GankIoCache>>
 
     @Query("SELECT * FROM GankIoCache WHERE type = :category LIMIT :count OFFSET :offset")
     fun getCategoryData(category: String, count: Int, offset: Int): Flowable<GankIoCache>
