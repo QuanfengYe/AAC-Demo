@@ -4,6 +4,7 @@ import android.util.Log
 import io.reactivex.Flowable
 import me.yeqf.android.api.retrofit.GankIoFactory
 import me.yeqf.android.bean.DailyData
+import me.yeqf.android.bean.DateData
 import me.yeqf.android.bean.GanHuo
 import me.yeqf.android.bean.ItemData
 import me.yeqf.android.persistence.dao.GankIoDao
@@ -23,7 +24,11 @@ object GankIoRepository {
         return CacheDatabase.getInstance().getGankIoDao()
     }
 
-    fun getDaily(year: Int, month: Int, day: Int): Flowable<List<GankIoCache>> {
+    fun getPostedDateList(): Flowable<DateData> {
+        return GankIoFactory.getService().getPostedDateList()
+    }
+
+    fun getDaily(date: Array<Int>): Flowable<List<GankIoCache>> {
         Log.d(TAG, "getDaily")
 
         val helper = object: RepositoryHelper<List<GankIoCache>, DailyData>() {
@@ -55,13 +60,13 @@ object GankIoRepository {
 
             override fun loadFromDb(): Flowable<List<GankIoCache>> {
                 Log.d(TAG, "getDaily loadFromDb")
-                val time = String.format("%04d-%02d-%02d", year, month, day)
+                val time = String.format("%04d-%02d-%02d", date[0], date[1], date[2])
                 return getGankIoDao().getDailyData(time)
             }
 
             override fun createCall(): Flowable<DailyData> {
                 Log.d(TAG, "getDaily createCall")
-                return GankIoFactory.getService().getDailyData(year, month, day)
+                return GankIoFactory.getService().getDailyData(date[0], date[1], date[2])
             }
 
         }

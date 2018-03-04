@@ -10,6 +10,7 @@ import java.util.*
 object TimeUtils {
     val FORMAT_YYYYMMDD = SimpleDateFormat("yyyyMMdd", Locale.CHINA)
     val FORMAT_YYYY_MM_DD = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
+    val FORMAT_YYYYMMDD_SLASH = SimpleDateFormat("yyyy/MM/dd", Locale.CHINA)
     val FORMAT_YYYYMMDD_T_HHMMSS_SSSZ = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
 
     /**
@@ -45,7 +46,23 @@ object TimeUtils {
         return ""
     }
 
-    fun getDate(time: String, format: SimpleDateFormat): Array<Int> {
+    /**
+     * 转换时间格式
+     * @param time String
+     * @param fin 源格式
+     * @param fout 目标格式
+     * @return String
+     */
+    fun transform(time: String, fin: SimpleDateFormat, fout: SimpleDateFormat): String {
+        try {
+            return fout.format(Date(getTime(time, fin)))
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return ""
+    }
+
+    fun getDateArray(time: String, format: SimpleDateFormat): Array<Int> {
         val array = arrayOf(0, 0, 0)
         val c = Calendar.getInstance()
         c.clear()

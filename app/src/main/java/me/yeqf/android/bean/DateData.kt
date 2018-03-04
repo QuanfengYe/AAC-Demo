@@ -7,4 +7,4 @@ import android.arch.persistence.room.PrimaryKey
 /**
  * Created by Administrator on 2018\2\11 0011.
  */
-data class DateData(var results: List<String>? = null) : BaseResponse()
+data class DateData(var results: List<String>) : BaseResponse()

@@ -1,6 +1,5 @@
 package me.yeqf.common.repository
 
-import android.util.Log
 import io.reactivex.Flowable
 import me.yeqf.common.utils.rxjava.RxSchedulers
 
@@ -11,7 +10,6 @@ abstract class RepositoryHelper<ResultType, ResponseType> {
 
     fun getResult(): Flowable<ResultType> =
             loadFromDb().doOnNext {
-                Log.d("loadFromDb", "doOnNext" + it.toString())
                 if (shouldFetch(it))
                     createCall().compose(RxSchedulers.Flowable.runOnlyIo())
                             .subscribe {

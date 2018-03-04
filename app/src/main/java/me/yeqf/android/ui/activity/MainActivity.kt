@@ -2,57 +2,85 @@ package me.yeqf.android.ui.activity
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.widget.Toast
-import me.yeqf.android.R
-import me.yeqf.android.ui.viewmodel.MainActivityViewModel
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
-import me.yeqf.android.R.id.textView
+import kotlinx.android.synthetic.main.common_toolbar.*
+import me.yeqf.android.R
+import me.yeqf.android.base.BaseActivity
+import me.yeqf.android.library.brvah.bean.GankIoSection
 import me.yeqf.android.persistence.entity.GankIoCache
+import me.yeqf.android.ui.adapter.DailyAdapter
+import me.yeqf.android.ui.viewmodel.DailyViewModel
+import me.yeqf.android.utils.DataUtils
 import me.yeqf.common.utils.TimeUtils
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var mViewModel: DailyViewModel
+    private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mAdapter: DailyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        lifecycle.addObserver(viewModel)
+        mViewModel = ViewModelProviders.of(this).get(DailyViewModel::class.java)
+        lifecycle.addObserver(mViewModel)
+
+        initView()
     }
 
     override fun onStart() {
         super.onStart()
-        edit.addTextChangedListener(mWatcher)
+        mViewModel.getDate {
+            requestDailyData(it)
+            date.text = TimeUtils.transform(it, TimeUtils.FORMAT_YYYY_MM_DD, TimeUtils.FORMAT_YYYYMMDD_SLASH)
+        }
     }
 
-    private val mWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
+    override fun onResume() {
+        super.onResume()
 
-        }
+        supportActionBar?.title = "Gank.io"
+    }
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    private fun initView() {
+        mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = mLayoutManager
+    }
 
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val timeStr = s.toString()
-            val date = TimeUtils.getDate(timeStr, TimeUtils.FORMAT_YYYYMMDD)
-            if(s?.length == 8)
-                viewModel.getDaily(date[0], date[1], date[2]) {
-                    textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
-                    for(cache: GankIoCache in it) {
-                        Log.d("MainActivity", System.currentTimeMillis().toString() + "---" + cache.toString())
-                    }
+    private fun requestDailyData(time: String) {
+        val date = TimeUtils.getDateArray(time, TimeUtils.FORMAT_YYYY_MM_DD)
+        mViewModel.getDaily(date) {
+            for (obj: GankIoCache in it) {
+                if (obj.type == "福利") {
+                    loadDailyImage(obj.url)
+                    break
                 }
-//            viewModel.getCategory(s.toString(), 10, 1) {
-//                textView.text = (System.currentTimeMillis().toString() + "\n" + it.toString())
-//            }
+            }
+            notifyRecyclerView(DataUtils.getSectionData(it))
         }
     }
+
+    private fun loadDailyImage(url: String?) {
+        Glide.with(this).load(url).into(poster)
+    }
+
+    private fun notifyRecyclerView(data: List<GankIoSection>) {
+        mAdapter = DailyAdapter(R.layout.item_recyclerview_daily, R.layout.section_recyclerview_daily, data)
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            val obj = data[position]
+            if(!obj.isHeader)
+                WebActivity.open(this, data[position].t.url, data[position].t.desc)
+        }
+        recyclerView.adapter = mAdapter
+    }
+
+    override fun getContentRes(): Int = R.layout.activity_main
+
+    override fun getMenuRes(): Int = R.menu.menu_main
+
+    override fun getToolBar(): Toolbar = toolbar
 }

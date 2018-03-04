@@ -16,7 +16,7 @@ interface GankIoService {
      * http://gank.io/api/day/history 方式 GET
      */
     @GET("day/history")
-    fun getPostedDateList(): Single<DateData>
+    fun getPostedDateList(): Flowable<DateData>
 
     /**
      * 每日数据： http://gank.io/api/day/年/月/日
