@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="toolbarPopupTheme" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item><!--设置不覆盖锚点-->
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:actionMenuTextColor">@color/md_white</item>
+    </style>
+
 </resources>

@@ -28,12 +28,6 @@ class DailyViewModel : BaseViewModel() {
                 .subscribe( { body(it) }, { Log.e(TAG, "Unable to get gank.io daily  info!", it) }))
     }
 
-    fun getCategory(category: String, count: Int, page: Int, body:(GankIoCache) -> Unit) {
-        mDisposable.add(GankIoRepository.getCatetory(category, count, page)
-                .compose(RxSchedulers.Flowable.runOnIo())
-                .subscribe({ body(it) }, { Log.e(TAG, "Unable to get gank.io category  info!", it) }))
-    }
-
     companion object {
         private val TAG = DailyViewModel::class.java.simpleName
     }

@@ -25,10 +25,9 @@ data class GankIoCache(@PrimaryKey
                        var content: String? = null,
                        var updatedAt: Long = 0,
                        var time: String,
-                       var apiFrom: Int,
                        var insertTime: Long) {
-    constructor(): this("", 0, "", 0, "", "", "", false, "", "", "", 0, "", 0, 0)
-    constructor(o: GanHuo, apiFrom: Int) :
+    constructor(): this("", 0, "", 0, "", "", "", false, "", "", "", 0, "", 0)
+    constructor(o: GanHuo) :
             this(o._id,
                     TimeUtils.getTime(o.createdAt, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
                     o.desc,
@@ -42,7 +41,6 @@ data class GankIoCache(@PrimaryKey
                     o.content,
                     TimeUtils.getTime(o.updated_at, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
                     "1970-01-01",
-                    apiFrom,
                     0) {
         if(o.images != null) {
             val sb = StringBuffer()

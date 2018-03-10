@@ -1,5 +1,6 @@
 package me.yeqf.android.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -24,7 +25,7 @@ class WebActivity : BaseSwipeRefreshActivity() {
         private const val EXTRA_URL = "URL"
         private const val EXTRA_TITLE = "TITLE"
 
-        fun open(ctx: BaseActivity, url: String?, title: String?) {
+        fun open(ctx: Context, url: String?, title: String?) {
             val intent = Intent(ctx, WebActivity::class.java)
             intent.putExtra(EXTRA_URL, url)
             intent.putExtra(EXTRA_TITLE, title)

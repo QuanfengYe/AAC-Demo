@@ -17,10 +17,8 @@ import me.yeqf.common.repository.RepositoryHelper
  */
 object GankIoRepository {
     val TAG = GankIoRepository::class.java.simpleName
-    val API_DAILY = 1//"Daily"
-    val API_CATEGORY = 2//"Catetory"
 
-    private fun getGankIoDao() : GankIoDao {
+    private fun getGankIoDao(): GankIoDao {
         return CacheDatabase.getInstance().getGankIoDao()
     }
 
@@ -31,14 +29,14 @@ object GankIoRepository {
     fun getDaily(date: Array<Int>): Flowable<List<GankIoCache>> {
         Log.d(TAG, "getDaily")
 
-        val helper = object: RepositoryHelper<List<GankIoCache>, DailyData>() {
+        val helper = object : RepositoryHelper<List<GankIoCache>, DailyData>() {
             override fun saveCallResult(resp: DailyData) {
                 Log.d(TAG, "getDaily saveCallResult")
                 val map = resp.results
-                if(map != null) {
+                if (map != null) {
                     CacheDatabase.getInstance().beginTransaction()
                     for (o: GanHuo in map.getMergeList()) {
-                        save(o, API_DAILY)
+                        save(o)
                     }
                     CacheDatabase.getInstance().setTransactionSuccessful()
                     CacheDatabase.getInstance().endTransaction()
@@ -49,11 +47,9 @@ object GankIoRepository {
                 Log.d(TAG, "getDaily shouldFetch")
                 if (data == null || data.isEmpty())
                     return true
-                for(it: GankIoCache in data) {
-                    if(API_DAILY == it.apiFrom) {
-                        if(System.currentTimeMillis() - it.insertTime < 8 * 60 * 60 * 1000)
-                            return false
-                    }
+                for (it: GankIoCache in data) {
+                    if (System.currentTimeMillis() - it.insertTime < 8 * 60 * 60 * 1000)
+                        return false
                 }
                 return true
             }
@@ -74,31 +70,35 @@ object GankIoRepository {
         return helper.getResult()
     }
 
-    fun getCatetory(category: String, count: Int, page: Int): Flowable<GankIoCache> {
+    fun getCatetory(category: String, count: Int, page: Int): Flowable<List<GankIoCache>> {
         Log.d(TAG, "getCatetory")
 
-        val helper = object: RepositoryHelper<GankIoCache, ItemData>() {
+        val helper = object : RepositoryHelper<List<GankIoCache>, ItemData>() {
             override fun saveCallResult(resp: ItemData) {
                 Log.d(TAG, "getCatetory saveCallResult")
                 val list = resp.results
-                if(list != null) {
+                if (list != null) {
                     CacheDatabase.getInstance().beginTransaction()
                     for (o: GanHuo in list) {
-                        save(o, API_CATEGORY)
+                        save(o)
                     }
                     CacheDatabase.getInstance().setTransactionSuccessful()
                     CacheDatabase.getInstance().endTransaction()
                 }
             }
 
-            override fun shouldFetch(data: GankIoCache?): Boolean {
+            override fun shouldFetch(data: List<GankIoCache>?): Boolean {
                 Log.d(TAG, "getCatetory shouldFetch")
-                if (data == null)
+                if (data == null || data.isEmpty())
                     return true
-                return false
+                for (it: GankIoCache in data) {
+                    if (System.currentTimeMillis() - it.insertTime < 8 * 60 * 60 * 1000)
+                        return false
+                }
+                return true
             }
 
-            override fun loadFromDb(): Flowable<GankIoCache> {
+            override fun loadFromDb(): Flowable<List<GankIoCache>> {
                 Log.d(TAG, "getCatetory loadFromDb")
                 val offset = (page - 1) * count
                 return getGankIoDao().getCategoryData(category, count, offset)
@@ -114,8 +114,8 @@ object GankIoRepository {
         return helper.getResult()
     }
 
-    private fun save(o: GanHuo, apiFrom: Int) {
-        val cache = GankIoCache(o, apiFrom)
+    private fun save(o: GanHuo) {
+        val cache = GankIoCache(o)
         Log.d(TAG, "save " + cache.toString())
 
         getGankIoDao().insert(cache)

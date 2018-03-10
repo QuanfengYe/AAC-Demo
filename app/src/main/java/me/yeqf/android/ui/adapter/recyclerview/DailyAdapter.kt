@@ -1,4 +1,4 @@
-package me.yeqf.android.ui.adapter
+package me.yeqf.android.ui.adapter.recyclerview
 
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder

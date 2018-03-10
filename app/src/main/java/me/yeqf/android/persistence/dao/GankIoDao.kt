@@ -16,11 +16,11 @@ interface GankIoDao {
     /**
      *  time:yyyy-MM-dd
      */
-    @Query("SELECT * FROM GankIoCache WHERE time = :time")
+    @Query("SELECT * FROM GankIoCache WHERE time = :time ORDER BY _id")
     fun getDailyData(time: String): Flowable<List<GankIoCache>>
 
     @Query("SELECT * FROM GankIoCache WHERE type = :category LIMIT :count OFFSET :offset")
-    fun getCategoryData(category: String, count: Int, offset: Int): Flowable<GankIoCache>
+    fun getCategoryData(category: String, count: Int, offset: Int): Flowable<List<GankIoCache>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(data: GankIoCache)
