@@ -23,7 +23,11 @@ class DailyViewModel : BaseViewModel() {
     }
 
     fun getDaily(date: Array<Int>, body:(List<GankIoCache>) -> Unit) {
-        mDisposable.add(GankIoRepository.getDaily(date)
+        getDaily(date, false, body)
+    }
+
+    fun getDaily(date: Array<Int>, reLoad: Boolean, body:(List<GankIoCache>) -> Unit) {
+        mDisposable.add(GankIoRepository.getDaily(date, reLoad)
                 .compose(RxSchedulers.Flowable.runOnIo())
                 .subscribe( { body(it) }, { Log.e(TAG, "Unable to get gank.io daily  info!", it) }))
     }

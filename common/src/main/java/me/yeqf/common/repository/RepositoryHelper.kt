@@ -4,25 +4,41 @@ import io.reactivex.Flowable
 import me.yeqf.common.utils.rxjava.RxSchedulers
 
 /**
- *
+ - 
+ - @Author:  yeqf
+ - @Time:  2018/3/11 23:09
  */
 abstract class RepositoryHelper<ResultType, ResponseType> {
-
     fun getResult(): Flowable<ResultType> =
-            loadFromDb().doOnNext {
-                if (shouldFetch(it))
-                    createCall().compose(RxSchedulers.Flowable.runOnlyIo())
-                            .subscribe {
-                                saveCallResult(it)
-                            }
-            }
+            loadLocalCache()
+                    .doOnNext {
+                        if (isShouldFetch(it))
+                            loadNetData().compose(RxSchedulers.Flowable.runOnlyIo())
+                                    .subscribe {
+                                        saveNetData(it)
+                                    }
+                    }.filter {
+                        return@filter isEmitCache(it)
+                    }.map { return@map makeExtraWork(it) }
 
-    protected abstract fun saveCallResult(resp: ResponseType)
+    /**
+     * 是否发射数据
+     * @param data 数据库查询返回信息
+     * @return Boolean
+     */
+    protected abstract fun isEmitCache(data: ResultType?): Boolean
 
-    protected abstract fun shouldFetch(data: ResultType?): Boolean
+    /**
+     *
+     */
+    protected abstract fun isShouldFetch(data: ResultType?): Boolean
 
-    protected abstract fun loadFromDb(): Flowable<ResultType>
+    protected abstract fun loadLocalCache(): Flowable<ResultType>
 
-    protected abstract fun createCall(): Flowable<ResponseType>
+    protected abstract fun loadNetData(): Flowable<ResponseType>
+
+    protected abstract fun saveNetData(resp: ResponseType)
+
+    protected abstract fun makeExtraWork(data: ResultType): ResultType
 
 }

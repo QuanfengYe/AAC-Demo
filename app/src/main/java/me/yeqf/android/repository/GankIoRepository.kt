@@ -26,11 +26,42 @@ object GankIoRepository {
         return GankIoFactory.getService().getPostedDateList()
     }
 
-    fun getDaily(date: Array<Int>): Flowable<List<GankIoCache>> {
+    fun getDaily(date: Array<Int>, reLoad: Boolean): Flowable<List<GankIoCache>> {
         Log.d(TAG, "getDaily")
 
         val helper = object : RepositoryHelper<List<GankIoCache>, DailyData>() {
-            override fun saveCallResult(resp: DailyData) {
+
+            override fun isEmitCache(data: List<GankIoCache>?): Boolean {
+                if (data == null || data.isEmpty())
+                    return false
+                return true
+            }
+
+            override fun isShouldFetch(data: List<GankIoCache>?): Boolean {
+                Log.d(TAG, "getDaily shouldFetch")
+                if (reLoad)
+                    return true
+                if (data == null || data.isEmpty())
+                    return true
+                for (it: GankIoCache in data) {
+                    if (System.currentTimeMillis() - it.insertTime < 8 * 60 * 60 * 1000)
+                        return false
+                }
+                return true
+            }
+
+            override fun loadLocalCache(): Flowable<List<GankIoCache>> {
+                Log.d(TAG, "getDaily loadLocalCache")
+                val time = String.format("%04d-%02d-%02d", date[0], date[1], date[2])
+                return getGankIoDao().getDailyData(time)
+            }
+
+            override fun loadNetData(): Flowable<DailyData> {
+                Log.d(TAG, "getDaily loadNetData")
+                return GankIoFactory.getService().getDailyData(date[0], date[1], date[2])
+            }
+
+            override fun saveNetData(resp: DailyData) {
                 Log.d(TAG, "getDaily saveCallResult")
                 val map = resp.results
                 if (map != null) {
@@ -43,8 +74,31 @@ object GankIoRepository {
                 }
             }
 
-            override fun shouldFetch(data: List<GankIoCache>?): Boolean {
-                Log.d(TAG, "getDaily shouldFetch")
+            override fun makeExtraWork(data: List<GankIoCache>): List<GankIoCache> {
+                return data
+            }
+
+        }
+
+        return helper.getResult()
+    }
+
+    fun getCatetory(category: String, count: Int, page: Int, reLoad: Boolean): Flowable<List<GankIoCache>> {
+        Log.d(TAG, "getCatetory")
+
+        val helper = object : RepositoryHelper<List<GankIoCache>, ItemData>() {
+
+            override fun isEmitCache(data: List<GankIoCache>?): Boolean {
+                if (data == null || data.isEmpty()) {
+                    return false
+                }
+                return true
+            }
+
+            override fun isShouldFetch(data: List<GankIoCache>?): Boolean {
+                Log.d(TAG, "getCatetory shouldFetch")
+                if (reLoad)
+                    return true
                 if (data == null || data.isEmpty())
                     return true
                 for (it: GankIoCache in data) {
@@ -54,28 +108,19 @@ object GankIoRepository {
                 return true
             }
 
-            override fun loadFromDb(): Flowable<List<GankIoCache>> {
-                Log.d(TAG, "getDaily loadFromDb")
-                val time = String.format("%04d-%02d-%02d", date[0], date[1], date[2])
-                return getGankIoDao().getDailyData(time)
+            override fun loadLocalCache(): Flowable<List<GankIoCache>> {
+                Log.d(TAG, "getCatetory loadLocalCache")
+                val offset = (page - 1) * count
+                return getGankIoDao().getCategoryData(category, count, offset)
             }
 
-            override fun createCall(): Flowable<DailyData> {
-                Log.d(TAG, "getDaily createCall")
-                return GankIoFactory.getService().getDailyData(date[0], date[1], date[2])
+            override fun loadNetData(): Flowable<ItemData> {
+                Log.d(TAG, "getCatetory loadNetData")
+                return GankIoFactory.getService().getCategoryData(category, count, page)
             }
 
-        }
-
-        return helper.getResult()
-    }
-
-    fun getCatetory(category: String, count: Int, page: Int): Flowable<List<GankIoCache>> {
-        Log.d(TAG, "getCatetory")
-
-        val helper = object : RepositoryHelper<List<GankIoCache>, ItemData>() {
-            override fun saveCallResult(resp: ItemData) {
-                Log.d(TAG, "getCatetory saveCallResult")
+            override fun saveNetData(resp: ItemData) {
+                Log.d(TAG, "getCatetory saveNetData")
                 val list = resp.results
                 if (list != null) {
                     CacheDatabase.getInstance().beginTransaction()
@@ -87,28 +132,12 @@ object GankIoRepository {
                 }
             }
 
-            override fun shouldFetch(data: List<GankIoCache>?): Boolean {
-                Log.d(TAG, "getCatetory shouldFetch")
-                if (data == null || data.isEmpty())
-                    return true
-                for (it: GankIoCache in data) {
-                    if (System.currentTimeMillis() - it.insertTime < 8 * 60 * 60 * 1000)
-                        return false
+            override fun makeExtraWork(data: List<GankIoCache>): List<GankIoCache> {
+                for(obj: GankIoCache in data) {
+                    obj.page = page
                 }
-                return true
+                return data
             }
-
-            override fun loadFromDb(): Flowable<List<GankIoCache>> {
-                Log.d(TAG, "getCatetory loadFromDb")
-                val offset = (page - 1) * count
-                return getGankIoDao().getCategoryData(category, count, offset)
-            }
-
-            override fun createCall(): Flowable<ItemData> {
-                Log.d(TAG, "getCatetory createCall")
-                return GankIoFactory.getService().getCategoryData(category, count, page)
-            }
-
         }
 
         return helper.getResult()

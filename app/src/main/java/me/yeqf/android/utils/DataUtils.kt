@@ -2,6 +2,7 @@ package me.yeqf.android.utils
 
 import me.yeqf.android.library.brvah.bean.GankIoSection
 import me.yeqf.android.persistence.entity.GankIoCache
+import java.util.*
 
 /**
  * Created by yeqf on 2018/3/3.
@@ -10,6 +11,7 @@ object DataUtils {
     fun getSectionData(data: List<GankIoCache>): MutableList<GankIoSection> {
         val mData: MutableList<GankIoSection> = arrayListOf()
         val flags = arrayOfNulls<Boolean>(7)
+//        Collections.sort(data)
         for (obj: GankIoCache in data) {
             when (obj.type) {
                 "Android" -> {

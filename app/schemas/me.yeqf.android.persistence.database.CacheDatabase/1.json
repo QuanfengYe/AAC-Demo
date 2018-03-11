@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a082ffa57d0fadd80df9b591c37e381b",
+    "identityHash": "a8151b25ab1dfaced007d66c661f9c71",
     "entities": [
       {
         "tableName": "GankIoCache",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `desc` TEXT, `publishedAt` INTEGER NOT NULL, `source` TEXT, `type` TEXT, `url` TEXT, `used` INTEGER, `who` TEXT, `imagesUrl` TEXT, `content` TEXT, `updatedAt` INTEGER NOT NULL, `time` TEXT NOT NULL, `insertTime` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `desc` TEXT, `publishedAt` INTEGER NOT NULL, `source` TEXT, `type` TEXT NOT NULL, `url` TEXT, `used` INTEGER, `who` TEXT, `imagesUrl` TEXT, `content` TEXT, `updatedAt` INTEGER NOT NULL, `time` TEXT NOT NULL, `insertTime` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
         "fields": [
           {
             "fieldPath": "_id",
@@ -42,7 +42,7 @@
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "url",
@@ -105,7 +105,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a082ffa57d0fadd80df9b591c37e381b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a8151b25ab1dfaced007d66c661f9c71\")"
     ]
   }
 }
