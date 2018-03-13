@@ -1,12 +1,9 @@
 package me.yeqf.android.persistence.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import io.reactivex.Flowable
-import me.yeqf.android.bean.DailyData
 import me.yeqf.android.persistence.entity.GankIoCache
+import me.yeqf.common.room.converter.ListConverter
 
 /**
  * Created by yeqf on 2018/2/10.

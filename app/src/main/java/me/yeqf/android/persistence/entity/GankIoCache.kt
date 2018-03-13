@@ -22,14 +22,14 @@ data class GankIoCache(@PrimaryKey
                        var url: String? = "",
                        var used: Boolean? = false,
                        var who: String? = "",
-                       var imagesUrl: String? = null,
+                       var images: List<String>? = null,
                        var content: String? = null,
                        var updatedAt: Long = 0,
                        var time: String,
                        var insertTime: Long,
                        @Ignore
                        var page: Int) {
-    constructor(): this("", 0, "", 0, "", "", "", false, "", "", "", 0, "", 0, 0)
+    constructor(): this("", 0, "", 0, "", "", "", false, "", null, "", 0, "", 0, 0)
     constructor(o: GanHuo) :
             this(o._id,
                     TimeUtils.getTime(o.createdAt, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
@@ -40,20 +40,12 @@ data class GankIoCache(@PrimaryKey
                     o.url,
                     o.used,
                     o.who,
-                    null,
+                    o.images,
                     o.content,
                     TimeUtils.getTime(o.updated_at, TimeUtils.FORMAT_YYYYMMDD_T_HHMMSS_SSSZ),
                     "1970-01-01",
                     0,
                     1) {
-        if(o.images != null) {
-            val sb = StringBuffer()
-            for (s: String in o.images!!) {
-                sb.append(s)
-                sb.append(",")
-            }
-            this.imagesUrl = sb.substring(0, sb.length - 1)
-        }
         if(publishedAt > 0)
             this.time = TimeUtils.getTime(publishedAt, TimeUtils.FORMAT_YYYY_MM_DD)
         insertTime = System.currentTimeMillis()

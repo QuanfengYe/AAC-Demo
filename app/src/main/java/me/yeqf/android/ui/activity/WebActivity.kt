@@ -3,12 +3,15 @@ package me.yeqf.android.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.webkit.*
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_web.*
 import kotlinx.android.synthetic.main.common_toolbar.*
 import me.yeqf.android.R
@@ -102,6 +105,22 @@ class WebActivity : BaseSwipeRefreshActivity() {
         override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
             super.onReceivedError(view, request, error)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.action_open_url -> {
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                val uri = Uri.parse(web.url)
+                intent.data = uri
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun getContentRes(): Int = R.layout.activity_web

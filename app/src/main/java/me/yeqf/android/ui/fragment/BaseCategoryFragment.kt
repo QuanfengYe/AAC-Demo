@@ -72,6 +72,9 @@ open abstract class BaseCategoryFragment : Fragment() {
             }
         } else {
             recyclerView.layoutManager = mLayoutManager
+            val divider = getItemDecoration()
+            if(divider != null)
+                recyclerView.addItemDecoration(divider)
             mAdapter = getAdapter(data)
             mAdapter?.setOnItemClickListener { _, _, position ->
                 val obj = data[position]
@@ -90,6 +93,8 @@ open abstract class BaseCategoryFragment : Fragment() {
     abstract fun getLayoutResId(): Int
 
     abstract fun getLayoutManager(): RecyclerView.LayoutManager
+
+    abstract fun getItemDecoration(): RecyclerView.ItemDecoration?
 
     abstract fun getAdapter(data: List<GankIoCache>): BaseQuickAdapter<GankIoCache, BaseViewHolder>
 }

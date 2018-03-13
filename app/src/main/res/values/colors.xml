@@ -5,5 +5,10 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="background_date_main">#64000000</color>
+    <color name="pink_bilibili">#FF80AB</color>
+    <color name="orange_jianshu">#E45E45</color>
+    <color name="red_weibo">#E61620</color>
+    <color name="yellow_miaopai">#FFD602</color>
+    <color name="blue_zhihu">#0078D7</color>
 
 </resources>

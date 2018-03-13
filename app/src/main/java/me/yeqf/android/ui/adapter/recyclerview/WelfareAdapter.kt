@@ -13,7 +13,7 @@ import me.yeqf.android.persistence.entity.GankIoCache
 class WelfareAdapter(layoutResId: Int, data: List<GankIoCache>) : BaseQuickAdapter<GankIoCache, BaseViewHolder>(layoutResId, data) {
 
     override fun convert(helper: BaseViewHolder?, item: GankIoCache?) {
-        Glide.with(mContext).load(item?.url).thumbnail(0.2f).into(helper?.getView(R.id.imageView) as ImageView)
+        Glide.with(mContext).load(item?.url).into(helper?.getView(R.id.imageView) as ImageView)
     }
 
 }
