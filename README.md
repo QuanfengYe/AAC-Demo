@@ -12,4 +12,4 @@ Demo for Android Architecture Component
 >* Glide
 >* BaseRecyclerViewAdapterHelper
 
-#### Thanks for [gank.io/api](http://gank.io/api)
+#### Thanks [gank.io/api](http://gank.io/api)
