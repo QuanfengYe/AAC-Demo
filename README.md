@@ -11,3 +11,5 @@ Demo for Android Architecture Component
 >* Retrofit
 >* Glide
 >* BaseRecyclerViewAdapterHelper
+
+#### Thanks for [gank.io/api](http://gank.io/api)
