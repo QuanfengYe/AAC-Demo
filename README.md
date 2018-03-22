@@ -1,12 +1,12 @@
 # AAC-Demo
 Demo for Android Architecture Component
 
+>* Kotlin
 >* Android Architecture Component
 >>* Lifecycle
 >>* ViewModel
 >>* Room
 >>* LiveData
->* Kotlin
 >* RxJava
 >* Retrofit
 >* Glide
