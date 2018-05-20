@@ -17,9 +17,8 @@ abstract class RepositoryHelper<ResultType, ResponseType> {
                                     .subscribe {
                                         saveNetData(it)
                                     }
-                    }.filter {
-                        return@filter isEmitCache(it)
-                    }.map { return@map makeExtraWork(it) }
+                    }.filter { isEmitCache(it)
+                    }.map { makeExtraWork(it) }
 
     /**
      * 是否发射数据

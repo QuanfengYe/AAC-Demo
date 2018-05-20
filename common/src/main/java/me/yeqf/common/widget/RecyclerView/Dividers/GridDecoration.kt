@@ -62,46 +62,49 @@ class GridDecoration : RecyclerView.ItemDecoration {
         drawVerticalDivider(c, parent, state)
     }
 
-    override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-        val pos = parent?.getChildAdapterPosition(view) ?: 0
+    override fun getItemOffsets(outRect: Rect?, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        val pos = parent.getChildAdapterPosition(view) ?: 0
         val spanCount = getSpanCount(parent)
-        val mAdapter = parent?.adapter
+        val mAdapter = parent.adapter
         val childCount = mAdapter?.itemCount ?: 0
-        if (isFisrtColumn(parent, pos, spanCount, childCount)) {//如果是第一列
+        var layoutParams: StaggeredGridLayoutManager.LayoutParams? = null
+        if(parent.layoutManager is StaggeredGridLayoutManager)
+            layoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        if (isFisrtColumn(parent, pos, spanCount, layoutParams)) {//如果是第一列
             if (isDrawBorder) {//要求绘制边界
-                if (isFirstRow(parent, pos, spanCount, childCount)) {//同时又是第一行，那么上下左右都绘制
+                if (isFirstRow(parent, pos, spanCount, layoutParams)) {//同时又是第一行，那么上下左右都绘制
                     outRect?.set(mDividerHeight, mDividerHeight, mDividerHeight, mDividerHeight)
                 } else {
                     outRect?.set(mDividerHeight, 0, mDividerHeight, mDividerHeight)
                 }
             } else {
-                if (isLastRow(parent, pos, spanCount, childCount)) {
+                if (isLastRow(parent, pos, spanCount, childCount, layoutParams)) {
                     outRect?.set(0, 0, mDividerHeight, 0)
                 } else {
                     outRect?.set(0, 0, mDividerHeight, mDividerHeight)
                 }
             }
-        } else if (isLastColumn(parent, pos, spanCount, childCount)) {//如果是最后一列
+        } else if (isLastColumn(parent, pos, spanCount, childCount, layoutParams)) {//如果是最后一列
             if (isDrawBorder) {//要求绘制边界
-                if (isFirstRow(parent, pos, spanCount, childCount)) {//同时又是第一行，那么上下右都绘制
+                if (isFirstRow(parent, pos, spanCount, layoutParams)) {//同时又是第一行，那么上下右都绘制
                     outRect?.set(0, mDividerHeight, mDividerHeight, mDividerHeight)
                 } else {
                     outRect?.set(0, 0, mDividerHeight, mDividerHeight)
                 }
             } else {
-                if (isLastRow(parent, pos, spanCount, childCount)) {
+                if (isLastRow(parent, pos, spanCount, childCount, layoutParams)) {
                     outRect?.set(0, 0, 0, 0)
                 } else {
                     outRect?.set(0, 0, 0, mDividerHeight)
                 }
             }
-        } else if (isFirstRow(parent, pos, spanCount, childCount)) {//如果是第一行（同时是第一列或最后一列，上面已处理，所以仅考虑中间列，spanCount >= 3）
+        } else if (isFirstRow(parent, pos, spanCount, layoutParams)) {//如果是第一行（同时是第一列或最后一列，上面已处理，所以仅考虑中间列，spanCount >= 3）
             if (isDrawBorder) {//要求绘制边界
                 outRect?.set(0, mDividerHeight, mDividerHeight, mDividerHeight)
             } else {
                 outRect?.set(0, 0, mDividerHeight, mDividerHeight)
             }
-        } else if (isLastRow(parent, pos, spanCount, childCount)) {//如果是最后一行（同时是第一列或最后一列，上面已处理，所以仅考虑中间列，spanCount >= 3）
+        } else if (isLastRow(parent, pos, spanCount, childCount, layoutParams)) {//如果是最后一行（同时是第一列或最后一列，上面已处理，所以仅考虑中间列，spanCount >= 3）
             if (isDrawBorder) {
                 outRect?.set(0, 0, mDividerHeight, mDividerHeight)
             } else {
@@ -171,42 +174,42 @@ class GridDecoration : RecyclerView.ItemDecoration {
         return columnCount
     }
 
-    private fun isFisrtColumn(parent: RecyclerView?, pos: Int, spanCount: Int, childCount: Int): Boolean {
+    private fun isFisrtColumn(parent: RecyclerView?, pos: Int, spanCount: Int, layoutParams: StaggeredGridLayoutManager.LayoutParams?): Boolean {
         val layoutManager = parent?.layoutManager
         when (layoutManager) {
             is GridLayoutManager -> return pos % spanCount == 0
             is StaggeredGridLayoutManager -> return if (layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL)
-                pos % spanCount == 0 else pos < spanCount
+                layoutParams?.spanIndex == 0 else pos < spanCount
         }
         return false
     }
 
-    private fun isLastColumn(parent: RecyclerView?, pos: Int, spanCount: Int, childCount: Int): Boolean {
+    private fun isLastColumn(parent: RecyclerView?, pos: Int, spanCount: Int, childCount: Int, layoutParams: StaggeredGridLayoutManager.LayoutParams?): Boolean {
         val layoutManager = parent?.layoutManager
         when (layoutManager) {
             is GridLayoutManager -> return (pos + 1) % spanCount == 0
             is StaggeredGridLayoutManager -> return if (layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL)
-                (pos + 1) % spanCount == 0 else pos >= childCount - childCount % spanCount
+                layoutParams?.spanIndex == spanCount - 1 else pos >= childCount - childCount % spanCount
         }
         return false
     }
 
-    private fun isFirstRow(parent: RecyclerView?, pos: Int, spanCount: Int, childCount: Int): Boolean {
+    private fun isFirstRow(parent: RecyclerView?, pos: Int, spanCount: Int, layoutParams: StaggeredGridLayoutManager.LayoutParams?): Boolean {
         val layoutManager = parent?.layoutManager
         when (layoutManager) {
             is GridLayoutManager -> return pos < spanCount
             is StaggeredGridLayoutManager -> return if (layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL)
-                pos < spanCount else pos % spanCount == 0
+                pos < spanCount else layoutParams?.spanIndex == 0
         }
         return false
     }
 
-    private fun isLastRow(parent: RecyclerView?, pos: Int, spanCount: Int, childCount: Int): Boolean {
+    private fun isLastRow(parent: RecyclerView?, pos: Int, spanCount: Int, childCount: Int, layoutParams: StaggeredGridLayoutManager.LayoutParams?): Boolean {
         val layoutManager = parent?.layoutManager
         when (layoutManager) {
             is GridLayoutManager -> return pos >= childCount - childCount % spanCount
             is StaggeredGridLayoutManager -> return if (layoutManager.orientation == StaggeredGridLayoutManager.VERTICAL)
-                pos >= childCount - childCount % spanCount else (pos + 1) % spanCount == 0
+                pos >= childCount - childCount % spanCount else layoutParams?.spanIndex == spanCount - 1
         }
         return false
     }

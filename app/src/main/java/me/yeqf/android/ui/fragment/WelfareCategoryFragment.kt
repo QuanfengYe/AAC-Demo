@@ -21,7 +21,7 @@ class WelfareCategoryFragment : BaseCategoryFragment() {
     }
 
     override fun getLayoutManager(): RecyclerView.LayoutManager {
-        return GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false)
+        return GridLayoutManager(activity!!, 2, GridLayoutManager.VERTICAL, false)
     }
 
     override fun getItemDecoration(): RecyclerView.ItemDecoration? {

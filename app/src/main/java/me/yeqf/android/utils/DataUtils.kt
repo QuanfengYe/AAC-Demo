@@ -18,7 +18,7 @@ object DataUtils {
                     if (flags[0] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[0] = true
                         mData.add(GankIoSection(obj))
                     }
@@ -27,7 +27,7 @@ object DataUtils {
                     if (flags[1] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[1] = true
                         mData.add(GankIoSection(obj))
                     }
@@ -36,7 +36,7 @@ object DataUtils {
                     if (flags[2] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[2] = true
                         mData.add(GankIoSection(obj))
                     }
@@ -45,7 +45,7 @@ object DataUtils {
                     if (flags[3] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[3] = true
                         mData.add(GankIoSection(obj))
                     }
@@ -54,7 +54,7 @@ object DataUtils {
                     if (flags[4] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[4] = true
                         mData.add(GankIoSection(obj))
                     }
@@ -63,7 +63,7 @@ object DataUtils {
                     if (flags[5] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[5] = true
                         mData.add(GankIoSection(obj))
                     }
@@ -72,7 +72,7 @@ object DataUtils {
                     if (flags[6] == true) {
                         mData.add(GankIoSection(obj))
                     } else {
-                        mData.add(GankIoSection(true, obj.type!!))
+                        mData.add(GankIoSection(true, obj.type))
                         flags[6] = true
                         mData.add(GankIoSection(obj))
                     }

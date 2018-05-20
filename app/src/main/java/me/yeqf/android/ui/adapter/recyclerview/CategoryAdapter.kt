@@ -1,5 +1,6 @@
 package me.yeqf.android.ui.adapter.recyclerview
 
+import android.view.View
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -17,6 +18,13 @@ class CategoryAdapter(layoutResId: Int, data: List<GankIoCache>) : BaseQuickAdap
     override fun convert(helper: BaseViewHolder?, item: GankIoCache) {
         helper?.setText(R.id.title, item.desc)
         helper?.setText(R.id.time, TimeUtils.getTime(item.publishedAt, TimeUtils.FORMAT_YYYYMMDD_SLASH))
+        val author = item.who
+        val viaTv = helper?.getView<TextView>(R.id.author)
+        if(author != null) {
+            viaTv?.text = "via. $author"
+        } else {
+            viaTv?.visibility = View.GONE
+        }
         val source = SitesHelper.getSiteName(item.url)
         val srcTv = helper?.getView<TextView>(R.id.source)
         srcTv?.text = source

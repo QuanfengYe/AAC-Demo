@@ -7,9 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.fragment_daily.*
+import me.yeqf.android.App
 import me.yeqf.android.R
 import me.yeqf.android.library.brvah.bean.GankIoSection
 import me.yeqf.android.persistence.entity.GankIoCache
@@ -34,6 +36,11 @@ class DailyFragment : Fragment() {
         lifecycle.addObserver(mViewModel)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        App.mApp.getRefWatcher().watch(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_daily, container, false)
     }
@@ -45,23 +52,30 @@ class DailyFragment : Fragment() {
 
     private fun initView() {
         mLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        mViewModel.getDate {
-            requestDailyData(it)
-            date.text = TimeUtils.transform(it, TimeUtils.FORMAT_YYYY_MM_DD, TimeUtils.FORMAT_YYYYMMDD_SLASH)
+        recyclerView.layoutManager = mLayoutManager
+        mAdapter = DailyAdapter(R.layout.item_recyclerview_daily, R.layout.section_recyclerview_daily, arrayListOf())
+        mAdapter?.setOnItemClickListener { _, _, position ->
+            val obj = mAdapter?.getItem(position)
+            if(obj != null)
+                if (!obj.isHeader)
+                    WebActivity.open(activity!!, obj.t.url, obj.t.desc)
+        }
+        recyclerView.adapter = mAdapter
+
+        mViewModel.getDate { time, list ->
+            date.text = TimeUtils.transform(time, TimeUtils.FORMAT_YYYY_MM_DD, TimeUtils.FORMAT_YYYYMMDD_SLASH)
+            showSuccessView(list)
         }
     }
 
-    private fun requestDailyData(time: String) {
-        val date = TimeUtils.getDateArray(time, TimeUtils.FORMAT_YYYY_MM_DD)
-        mViewModel.getDaily(date) {
-            for (obj: GankIoCache in it) {
-                if (obj.type == "福利") {
-                    loadDailyImage(obj.url)
-                    break
-                }
+    private fun showSuccessView(list: List<GankIoCache>) {
+        for (obj: GankIoCache in list) {
+            if (obj.type == "福利") {
+                loadDailyImage(obj.url)
+                break
             }
-            notifyRecyclerView(DataUtils.getSectionData(it))
         }
+        notifyRecyclerView(DataUtils.getSectionData(list))
     }
 
     private fun loadDailyImage(url: String?) {
@@ -69,13 +83,6 @@ class DailyFragment : Fragment() {
     }
 
     private fun notifyRecyclerView(data: List<GankIoSection>) {
-        recyclerView.layoutManager = mLayoutManager
-        mAdapter = DailyAdapter(R.layout.item_recyclerview_daily, R.layout.section_recyclerview_daily, data)
-        mAdapter?.setOnItemClickListener { adapter, view, position ->
-            val obj = data[position]
-            if (!obj.isHeader)
-                WebActivity.open(activity!!, data[position].t.url, data[position].t.desc)
-        }
-        recyclerView.adapter = mAdapter
+        mAdapter?.setNewData(data)
     }
 }

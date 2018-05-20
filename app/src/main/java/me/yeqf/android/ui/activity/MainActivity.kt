@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_toolbar.*
+import me.yeqf.android.App
 import me.yeqf.android.R
 import me.yeqf.android.base.BaseActivity
 import me.yeqf.android.ui.adapter.viewpager.MainFragmentAdapter
@@ -44,5 +45,11 @@ class MainActivity : BaseActivity() {
         override fun onPageSelected(position: Int) {
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        App.mApp.getRefWatcher().watch(this)
     }
 }

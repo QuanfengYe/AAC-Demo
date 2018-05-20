@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_category_common.*
+import me.yeqf.android.App
 import me.yeqf.android.persistence.entity.GankIoCache
 import me.yeqf.android.ui.activity.WebActivity
 import me.yeqf.android.ui.viewmodel.CategoryViewModel
@@ -17,7 +19,7 @@ import me.yeqf.android.ui.viewmodel.CategoryViewModel
 /**
  * Created by yeqf on 2018/3/11.
  */
-open abstract class BaseCategoryFragment : Fragment() {
+abstract class BaseCategoryFragment : Fragment() {
 
     private lateinit var mViewModel: CategoryViewModel
     private var mAdapter: BaseQuickAdapter<GankIoCache, BaseViewHolder>? = null
@@ -32,6 +34,12 @@ open abstract class BaseCategoryFragment : Fragment() {
         lifecycle.addObserver(mViewModel)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        App.mApp.getRefWatcher().watch(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutResId(), container, false)
     }
@@ -44,6 +52,24 @@ open abstract class BaseCategoryFragment : Fragment() {
     private fun initView() {
         mPageIdx = 1
         mLayoutManager = getLayoutManager()
+        recyclerView.layoutManager = mLayoutManager
+        val divider = getItemDecoration()
+        if (divider != null)
+            recyclerView.addItemDecoration(divider)
+        mAdapter = getAdapter(arrayListOf())
+        mAdapter?.setOnItemClickListener { _, _, position ->
+            val obj = mAdapter?.getItem(position)
+            WebActivity.open(activity!!, obj?.url, obj?.desc)
+        }
+        mAdapter?.setOnLoadMoreListener({
+            recyclerView.postDelayed({
+                mPageIdx++
+                requestCategoryData(true)
+            }, 100)
+        }, recyclerView)
+        recyclerView.itemAnimator = null
+        recyclerView.adapter = mAdapter
+
         mCategory = arguments?.get("category") as String
         requestCategoryData(false)
     }
@@ -59,7 +85,7 @@ open abstract class BaseCategoryFragment : Fragment() {
          * 如加载更多操作，当加载第5页时，数据库缓存中没有，从网络上加载再保存到数据库中
          * 这时，会触发分别加载第1-5页的五次操作，需屏蔽前四次
          * */
-        if(data.isNotEmpty() && data[0].page < mPageIdx) {
+        if (data.isNotEmpty() && data[0].page < mPageIdx) {
             return
         }
         if (loadMore) {
@@ -71,22 +97,7 @@ open abstract class BaseCategoryFragment : Fragment() {
                 mAdapter?.loadMoreComplete()
             }
         } else {
-            recyclerView.layoutManager = mLayoutManager
-            val divider = getItemDecoration()
-            if(divider != null)
-                recyclerView.addItemDecoration(divider)
-            mAdapter = getAdapter(data)
-            mAdapter?.setOnItemClickListener { _, _, position ->
-                val obj = data[position]
-                WebActivity.open(activity!!, obj.url, obj.desc)
-            }
-            mAdapter?.setOnLoadMoreListener({
-                recyclerView.postDelayed({
-                    mPageIdx++
-                    requestCategoryData(true)
-                }, 100)
-            }, recyclerView)
-            recyclerView.adapter = mAdapter
+            mAdapter?.setNewData(data)
         }
     }
 

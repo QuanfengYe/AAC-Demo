@@ -27,7 +27,7 @@ abstract class CacheDatabase : RoomDatabase() {
                 }
 
         private fun buildDatabase(): CacheDatabase =
-                Room.databaseBuilder(App.mApp!!.applicationContext, CacheDatabase::class.java,
+                Room.databaseBuilder(App.mApp.applicationContext, CacheDatabase::class.java,
                         "Cache.db").build()
     }
 }

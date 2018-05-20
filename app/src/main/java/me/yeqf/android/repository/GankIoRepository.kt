@@ -1,7 +1,7 @@
 package me.yeqf.android.repository
 
 import android.util.Log
-import io.reactivex.Flowable
+import io.reactivex.*
 import me.yeqf.android.api.retrofit.GankIoFactory
 import me.yeqf.android.bean.DailyData
 import me.yeqf.android.bean.DateData
