@@ -1,5 +1,6 @@
 package me.yeqf.common.repository
 
+import android.support.v4.view.ViewPager
 import io.reactivex.Flowable
 import me.yeqf.common.utils.rxjava.RxSchedulers
 

@@ -56,11 +56,11 @@ open class LinearDecoration : RecyclerView.ItemDecoration {
         mOrientation = orientation
     }
 
-    override fun onDrawOver(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
     }
 
-    override fun onDraw(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         if(mOrientation == LinearLayoutManager.VERTICAL) {
             drawHorizontalDivider(c, parent, state)
         } else {
@@ -68,18 +68,18 @@ open class LinearDecoration : RecyclerView.ItemDecoration {
         }
     }
 
-    override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-        val pos = parent!!.getChildAdapterPosition(view)
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        val pos = parent.getChildAdapterPosition(view)
         var childCount: Int = 0
         val mAdapter = parent.adapter
-        childCount = mAdapter.itemCount
+        childCount = mAdapter?.itemCount ?: 0
         if(pos < childCount - 1) { //最后一行/列不绘制
             if(mOrientation == LinearLayoutManager.VERTICAL) {
                 //画横线，就是往下偏移一个分割线的高度
-                outRect?.set(0, 0, 0, mDividerHeight)
+                outRect.set(0, 0, 0, mDividerHeight)
             } else {
                 //画竖线，就是往右偏移一个分割线的宽度
-                outRect?.set(0, 0, mDividerWidth, 0)
+                outRect.set(0, 0, mDividerWidth, 0)
             }
         }
     }

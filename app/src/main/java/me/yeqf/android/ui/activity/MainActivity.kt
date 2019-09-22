@@ -21,10 +21,43 @@ class MainActivity : BaseActivity() {
         mTabBar.setupWithViewPager(viewPager)
     }
 
-    override fun onResume() {
-        super.onResume()
-        supportActionBar?.title = "Gank.io"
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        supportActionBar?.title = "Gank.io"
+//        // Create a Constraints that defines when the task should run
+//        val myConstraints = Constraints.Builder()
+//                .setRequiresDeviceIdle(true)//设备闲时
+//                .setRequiresCharging(true)//充电时
+//                // Many other constraints are available, see the
+//                // Constraints.Builder reference
+//                .build()
+//        val request = OneTimeWorkRequest.Builder(DownloadWorker::class.java)
+//                .setConstraints(myConstraints)
+//                .setInputData(Data.Builder().putString("key", "value").build())
+//                .build()
+//        WorkManager.getInstance().enqueue(request)
+//        WorkManager.getInstance().getStatusById(request.id).observe(this, Observer {
+//            /**doSomething*/
+//            val result = it?.outputData
+//            if(it?.state?.isFinished == true)
+//                Toast.makeText(this@MainActivity, "work finish!", Toast.LENGTH_SHORT).show()
+//            else
+//                Toast.makeText(this@MainActivity, "work fained!", Toast.LENGTH_SHORT).show()
+//        })
+//    }
+//
+//    class DownloadWorker: Worker() {
+//        override fun doWork(): WorkerResult {
+//            // Fetch the arguments (and specify default values):
+//            val value = inputData.getString("key", "default")
+//            //doWork
+//            Thread.sleep(1000)
+//            //...set the output, and we're done!
+//            outputData = Data.Builder().putString("out", "value").build()
+//            // Indicate success or failure with your return value.
+//            return WorkerResult.SUCCESS
+//        }
+//    }
 
     override fun getContentRes(): Int = R.layout.activity_main
 

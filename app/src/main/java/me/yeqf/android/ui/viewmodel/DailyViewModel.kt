@@ -4,7 +4,6 @@ import android.util.Log
 import com.yeqf.android.base.BaseViewModel
 import me.yeqf.android.persistence.entity.GankIoCache
 import me.yeqf.android.repository.GankIoRepository
-import me.yeqf.android.utils.DataUtils
 import me.yeqf.common.utils.TimeUtils
 import me.yeqf.common.utils.rxjava.RxSchedulers
 

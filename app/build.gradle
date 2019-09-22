@@ -7,12 +7,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
     defaultConfig {
         applicationId "me.yeqf.android"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -36,18 +35,17 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     // Room (use 1.1.0-alpha1 for latest alpha)
-    implementation 'android.arch.persistence.room:runtime:1.1.0'
-    kapt "android.arch.persistence.room:compiler:1.1.0"
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    kapt "android.arch.persistence.room:compiler:1.1.1"
     // ViewModel and LiveData
     implementation 'android.arch.lifecycle:extensions:1.1.1'
-    kapt "android.arch.lifecycle:compiler:1.1.1"
     // RxJava support for Room
-    implementation 'android.arch.persistence.room:rxjava2:1.1.0'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
     // Paging
     //    implementation "android.arch.paging:runtime:1.0.0-alpha5"
     // Glide
@@ -63,4 +61,11 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+
+    def work_version = "1.0.0-alpha01"
+
+    implementation "android.arch.work:work-runtime:$work_version" // use -ktx for Kotlin
+
+    // optional - Firebase JobDispatcher support
+    implementation "android.arch.work:work-firebase:$work_version"
 }

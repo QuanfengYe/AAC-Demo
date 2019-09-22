@@ -21,7 +21,7 @@ class CategoryViewModel : BaseViewModel() {
     }
 
     fun getCategory(category: String, count: Int, page: Int, reLoad: Boolean, body:(List<GankIoCache>) -> Unit) {
-        mDisposable.add(GankIoRepository.getCatetory(category, count, page, reLoad)
+        mDisposable.add(GankIoRepository.getCategory(category, count, page, reLoad)
                 .compose(RxSchedulers.Flowable.runOnIo())
                 .subscribe({ body(it) }, { Log.e(TAG, "Unable to get gank.io category  info!", it) }))
     }

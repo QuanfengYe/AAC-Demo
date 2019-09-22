@@ -57,12 +57,12 @@ class GridDecoration : RecyclerView.ItemDecoration {
         mPaint?.style = Paint.Style.FILL
     }
 
-    override fun onDraw(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         drawHorizontalDivider(c, parent, state)
         drawVerticalDivider(c, parent, state)
     }
 
-    override fun getItemOffsets(outRect: Rect?, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val pos = parent.getChildAdapterPosition(view) ?: 0
         val spanCount = getSpanCount(parent)
         val mAdapter = parent.adapter
@@ -73,46 +73,46 @@ class GridDecoration : RecyclerView.ItemDecoration {
         if (isFisrtColumn(parent, pos, spanCount, layoutParams)) {//如果是第一列
             if (isDrawBorder) {//要求绘制边界
                 if (isFirstRow(parent, pos, spanCount, layoutParams)) {//同时又是第一行，那么上下左右都绘制
-                    outRect?.set(mDividerHeight, mDividerHeight, mDividerHeight, mDividerHeight)
+                    outRect.set(mDividerHeight, mDividerHeight, mDividerHeight, mDividerHeight)
                 } else {
-                    outRect?.set(mDividerHeight, 0, mDividerHeight, mDividerHeight)
+                    outRect.set(mDividerHeight, 0, mDividerHeight, mDividerHeight)
                 }
             } else {
                 if (isLastRow(parent, pos, spanCount, childCount, layoutParams)) {
-                    outRect?.set(0, 0, mDividerHeight, 0)
+                    outRect.set(0, 0, mDividerHeight, 0)
                 } else {
-                    outRect?.set(0, 0, mDividerHeight, mDividerHeight)
+                    outRect.set(0, 0, mDividerHeight, mDividerHeight)
                 }
             }
         } else if (isLastColumn(parent, pos, spanCount, childCount, layoutParams)) {//如果是最后一列
             if (isDrawBorder) {//要求绘制边界
                 if (isFirstRow(parent, pos, spanCount, layoutParams)) {//同时又是第一行，那么上下右都绘制
-                    outRect?.set(0, mDividerHeight, mDividerHeight, mDividerHeight)
+                    outRect.set(0, mDividerHeight, mDividerHeight, mDividerHeight)
                 } else {
-                    outRect?.set(0, 0, mDividerHeight, mDividerHeight)
+                    outRect.set(0, 0, mDividerHeight, mDividerHeight)
                 }
             } else {
                 if (isLastRow(parent, pos, spanCount, childCount, layoutParams)) {
-                    outRect?.set(0, 0, 0, 0)
+                    outRect.set(0, 0, 0, 0)
                 } else {
-                    outRect?.set(0, 0, 0, mDividerHeight)
+                    outRect.set(0, 0, 0, mDividerHeight)
                 }
             }
         } else if (isFirstRow(parent, pos, spanCount, layoutParams)) {//如果是第一行（同时是第一列或最后一列，上面已处理，所以仅考虑中间列，spanCount >= 3）
             if (isDrawBorder) {//要求绘制边界
-                outRect?.set(0, mDividerHeight, mDividerHeight, mDividerHeight)
+                outRect.set(0, mDividerHeight, mDividerHeight, mDividerHeight)
             } else {
-                outRect?.set(0, 0, mDividerHeight, mDividerHeight)
+                outRect.set(0, 0, mDividerHeight, mDividerHeight)
             }
         } else if (isLastRow(parent, pos, spanCount, childCount, layoutParams)) {//如果是最后一行（同时是第一列或最后一列，上面已处理，所以仅考虑中间列，spanCount >= 3）
             if (isDrawBorder) {
-                outRect?.set(0, 0, mDividerHeight, mDividerHeight)
+                outRect.set(0, 0, mDividerHeight, mDividerHeight)
             } else {
-                outRect?.set(0, 0, mDividerWidth, 0)
+                outRect.set(0, 0, mDividerWidth, 0)
             }
         } else {
             //其他
-            outRect?.set(0, 0, mDividerWidth, mDividerHeight)
+            outRect.set(0, 0, mDividerWidth, mDividerHeight)
         }
     }
 

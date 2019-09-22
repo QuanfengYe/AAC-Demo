@@ -7,7 +7,7 @@ import me.yeqf.common.api.factory.RetrofitFactory
  */
 class GankIoFactory : RetrofitFactory<GankIoService>() {
 
-    override val baseUrl = "http://gank.io/api/"
+    override val baseUrl = "https://gank.io/api/"
 
     override fun getClassType(): Class<GankIoService> =
             GankIoService::class.java

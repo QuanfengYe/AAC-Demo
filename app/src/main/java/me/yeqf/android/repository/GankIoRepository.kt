@@ -83,7 +83,7 @@ object GankIoRepository {
         return helper.getResult()
     }
 
-    fun getCatetory(category: String, count: Int, page: Int, reLoad: Boolean): Flowable<List<GankIoCache>> {
+    fun getCategory(category: String, count: Int, page: Int, reLoad: Boolean): Flowable<List<GankIoCache>> {
         Log.d(TAG, "getCatetory")
 
         val helper = object : RepositoryHelper<List<GankIoCache>, ItemData>() {
@@ -109,18 +109,18 @@ object GankIoRepository {
             }
 
             override fun loadLocalCache(): Flowable<List<GankIoCache>> {
-                Log.d(TAG, "getCatetory loadLocalCache")
+                Log.d(TAG, "getCategory loadLocalCache")
                 val offset = (page - 1) * count
                 return getGankIoDao().getCategoryData(category, count, offset)
             }
 
             override fun loadNetData(): Flowable<ItemData> {
-                Log.d(TAG, "getCatetory loadNetData")
+                Log.d(TAG, "getCategory loadNetData")
                 return GankIoFactory.getService().getCategoryData(category, count, page)
             }
 
             override fun saveNetData(resp: ItemData) {
-                Log.d(TAG, "getCatetory saveNetData")
+                Log.d(TAG, "getCategory saveNetData")
                 val list = resp.results
                 if (list != null) {
                     CacheDatabase.getInstance().beginTransaction()
@@ -145,7 +145,7 @@ object GankIoRepository {
 
     private fun save(o: GanHuo) {
         val cache = GankIoCache(o)
-        Log.d(TAG, "save " + cache.toString())
+        Log.d(TAG, "save $cache")
 
         getGankIoDao().insert(cache)
     }

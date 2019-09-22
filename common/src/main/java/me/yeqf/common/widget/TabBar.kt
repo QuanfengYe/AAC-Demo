@@ -133,14 +133,14 @@ class TabBar : RecyclerView {
 
     private fun onDragging(position: Int, positionOffset: Float) {
         val selectedPosition = mAdapter.selectedTabPosition
-        val v = layoutManager.findViewByPosition(position)
+        val v = layoutManager?.findViewByPosition(position)
         if (v != null) {
             if (positionOffset > 0) {
                 if (selectedPosition > position) {
                     //向右滑动position == selectedPosition - 1
-                    targetView = layoutManager.findViewByPosition(position) as TextView?
+                    targetView = layoutManager?.findViewByPosition(position) as TextView?
                     if (targetView != null) {
-                        nearView = layoutManager.findViewByPosition(position + 1) as TextView?
+                        nearView = layoutManager?.findViewByPosition(position + 1) as TextView?
                         mIndicatorExtendWidth = (getViewDecorated(nearView, VIEW_CENTER_X).toFloat() - mIndicatorWidth / 2) -
                                 (getViewDecorated(targetView!!, VIEW_CENTER_X) - mIndicatorWidth / 2)
 
@@ -162,9 +162,9 @@ class TabBar : RecyclerView {
                     }
                 } else {
                     //左滑动position == selectedPosition
-                    targetView = layoutManager.findViewByPosition(position + 1) as TextView?
+                    targetView = layoutManager?.findViewByPosition(position + 1) as TextView?
                     if (targetView != null) {
-                        nearView = layoutManager.findViewByPosition(position) as TextView?
+                        nearView = layoutManager?.findViewByPosition(position) as TextView?
                         mIndicatorExtendWidth = getViewDecorated(targetView!!, VIEW_CENTER_X) + mIndicatorWidth / 2 -
                                 (getViewDecorated(nearView, VIEW_CENTER_X).toFloat() + mIndicatorWidth / 2)
 
@@ -213,8 +213,8 @@ class TabBar : RecyclerView {
         isDrawIndicator = true
         val lastPosition = mAdapter.selectedTabPosition
         mAdapter.selectedTabPosition = position
-        val lastView = layoutManager.findViewByPosition(lastPosition) as TextView?
-        val curView = layoutManager.findViewByPosition((position)) as TextView?
+        val lastView = layoutManager?.findViewByPosition(lastPosition) as TextView?
+        val curView = layoutManager?.findViewByPosition((position)) as TextView?
         if (lastView != null && curView != null) {
             curView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
             curView.isClickable = false
@@ -234,14 +234,14 @@ class TabBar : RecyclerView {
         }
     }
 
-    override fun onChildAttachedToWindow(child: View?) {
+    override fun onChildAttachedToWindow(child: View) {
         super.onChildAttachedToWindow(child)
         val position = mAdapter.nextSelectPosition
         if (position == -1 && getChildAdapterPosition(child) == mAdapter.selectedTabPosition) {
-            if (child is TextView?) {
-                child?.setTextColor(selectedColor)
-                child?.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-                child?.isClickable = false
+            if (child is TextView) {
+                child.setTextColor(selectedColor)
+                child.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+                child.isClickable = false
             }
         }
         if (getChildAdapterPosition(child) == position) {
@@ -253,12 +253,12 @@ class TabBar : RecyclerView {
         }
     }
 
-    override fun onChildDetachedFromWindow(child: View?) {
+    override fun onChildDetachedFromWindow(child: View) {
         super.onChildDetachedFromWindow(child)
-        if (child is TextView?) {
-            child?.setTextColor(textColor)
-            child?.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
-            child?.isClickable = true
+        if (child is TextView) {
+            child.setTextColor(textColor)
+            child.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
+            child.isClickable = true
         }
         if (getChildAdapterPosition(child) == mAdapter.selectedTabPosition) {
             isDrawIndicator = false
@@ -286,7 +286,7 @@ class TabBar : RecyclerView {
     }
 
     private fun onDrawIndicator(c: Canvas?) {
-        val v = layoutManager.findViewByPosition(mAdapter.selectedTabPosition)
+        val v = layoutManager?.findViewByPosition(mAdapter.selectedTabPosition)
         if (v != null) {
             mIndicatorLeft = getViewDecorated(v, VIEW_CENTER_X).toFloat() - mIndicatorWidth / 2
             mIndicatorRight = getViewDecorated(v, VIEW_CENTER_X).toFloat() + mIndicatorWidth / 2
@@ -311,10 +311,10 @@ class TabBar : RecyclerView {
             return 0
         var result = 0
         val params = v.layoutParams as RecyclerView.LayoutParams
-        val left = layoutManager.getDecoratedLeft(v) - params.leftMargin
-        val right = layoutManager.getDecoratedRight(v) + params.rightMargin
-        val top = layoutManager.getDecoratedTop(v) - params.topMargin
-        val bottom = layoutManager.getDecoratedBottom(v) + params.bottomMargin
+        val left = layoutManager?.getDecoratedLeft(v) ?: 0 - params.leftMargin
+        val right = layoutManager?.getDecoratedRight(v) ?: 0 + params.rightMargin
+        val top = layoutManager?.getDecoratedTop(v) ?: 0 - params.topMargin
+        val bottom = layoutManager?.getDecoratedBottom(v) ?: 0 + params.bottomMargin
         when (direction) {
             VIEW_LEFT -> result = left
             VIEW_TOP -> result = top
